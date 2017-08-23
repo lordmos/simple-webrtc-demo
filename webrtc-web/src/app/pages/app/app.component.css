@@ -7,4 +7,5 @@ label {
 video {
     height: 300px;
     width: 400px;
+    background: black;
 }

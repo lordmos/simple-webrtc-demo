@@ -11,11 +11,11 @@
         <button *ngIf="user.token != me.token" (click)="call(user)">找TA聊天</button>
     </label>
     <figure>
-        <video id="me"></video>
+        <video id="meVideo" autoplay muted></video>
         <h3>我的视频</h3>
     </figure>
     <figure>
-        <video id="target"></video>
+        <video id="targetVideo" autoplay></video>
         <h3>TA的视频</h3>
     </figure>
 </div>

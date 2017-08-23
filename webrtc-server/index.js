@@ -9,6 +9,8 @@ const ONLINE = "ONLINE";
 const OFFLINE = "OFFLINE";
 const OFFERING = "OFFERING";
 const CALLING = "CALLING";
+const CANCEL = "CANCEL";
+const CONFIRM = "CONFIRM";
 const USERLIST = "USERLIST";
 
 io.on('connection', (socket) => {
@@ -28,21 +30,37 @@ io.on('connection', (socket) => {
     });
     socket.on(OFFERING, (msg) => {
         console.log(`${OFFERING} : ${JSON.stringify(msg)}`);
-        if (msg.sourceToken) {
+        if (msg.source.token) {
             for (let source of userList) {
-                if (source.token == sourceToken) {
+                if (source.token == msg.source.token) {
                     source.status = OFFERING;
                 }
             }
         }
-
-        if (msg.targetToken) {
-            socketMap[userInfo.token].emit(OFFERING, msg);
+        if (msg.target.token) {
+            socketMap[msg.target.token].emit(OFFERING, msg);
         }
     });
     socket.on(CALLING, (msg) => {
         console.log(`${CALLING} : ${JSON.stringify(msg)}`);
+        socketMap[msg.target.token].emit(CALLING, msg);
     });
+
+    socket.on(CONFIRM, (msg) => {
+        console.log(`${CONFIRM} : ${JSON.stringify(msg)}`);
+        for (let source of userList) {
+            if (source.token == msg.source.token || source.token == msg.target.token) {
+                source.status = CALLING;
+            }
+        }
+        socketMap[msg.source.token].emit(CONFIRM, msg);
+    });
+
+    socket.on(CANCEL, (msg) => {
+        console.log(`${CANCEL} : ${JSON.stringify(msg)}`);
+        socketMap[msg.source.token].emit(CANCEL, msg);
+    });
+
     socket.on('disconnect', () => {
         console.log('user disconnected');
         let deleteToken = "";

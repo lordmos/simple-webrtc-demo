@@ -24,6 +24,8 @@ export class SocketService {
 		this.socket.on(SocketMessageType[SocketMessageType.OFFLINE], (msg) => this.subcribe(SocketMessageType.OFFLINE, msg))
 		this.socket.on(SocketMessageType[SocketMessageType.OFFERING], (msg) => this.subcribe(SocketMessageType.OFFERING, msg))
 		this.socket.on(SocketMessageType[SocketMessageType.CALLING], (msg) => this.subcribe(SocketMessageType.CALLING, msg))
+		this.socket.on(SocketMessageType[SocketMessageType.CANCEL], (msg) => this.subcribe(SocketMessageType.CANCEL, msg))
+		this.socket.on(SocketMessageType[SocketMessageType.CONFIRM], (msg) => this.subcribe(SocketMessageType.CONFIRM, msg))
 		return this.socketSubject;
 	}
 
@@ -38,10 +40,6 @@ export class SocketService {
 			type: messageType,
 			message: message
 		});
-	}
-
-	call(target: any) {
-		// TODO
 	}
 
 }
