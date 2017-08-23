@@ -1,0 +1,14 @@
+{
+  "name": "webrtc-server",
+  "version": "1.0.0",
+  "description": "websocket server for a WebRTC client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "LordMOS",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "^2.0.3"
+  }
+}
