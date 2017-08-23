@@ -23,9 +23,9 @@
 
 ### 需要的准备：
 
-    server: node / socket.io
-    client: app / ionic + simple-peer 
-            webapp / angular + simple-peer
+    server: node / express + http + socket.io (for serve)
+    client: app / ionic + simple-peer + socket.io-client (for client)
+            webapp / angular + simple-peer + socket.io-client (for client)
 
 ### 资料：
 

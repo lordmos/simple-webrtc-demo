@@ -1,0 +1,21 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+    <h1>
+        Welcome {{title}}!!
+    </h1>
+    <input [(ngModel)]="name" placeholder="你叫什么？">
+    <button (click)="connect(name)">连接到服务器</button>
+    <hr/>
+    <label *ngFor="let user of userList">
+        {{user.name}}: {{user.status}} 
+        <button *ngIf="user.token != me.token" (click)="call(user)">找TA聊天</button>
+    </label>
+    <figure>
+        <video id="me"></video>
+        <h3>我的视频</h3>
+    </figure>
+    <figure>
+        <video id="target"></video>
+        <h3>TA的视频</h3>
+    </figure>
+</div>

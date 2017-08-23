@@ -1,0 +1,10 @@
+label {
+    border: 1px solid #999;
+    padding: 8px;
+    margin: 8px;
+}
+
+video {
+    height: 300px;
+    width: 400px;
+}
