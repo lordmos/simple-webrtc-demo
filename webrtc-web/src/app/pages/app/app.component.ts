@@ -19,7 +19,6 @@ export class AppComponent {
 
 	peer: any;
 	myPeerId: string;
-	otherPeer: any;
 
 	constructor(private socketService: SocketService) {
 		this.userList = [];
@@ -66,41 +65,105 @@ export class AppComponent {
 	ngOnInit() {
 		this.myVideo = document.getElementById("meVideo");
 		this.otherVideo = document.getElementById("targetVideo");
-		this.initPeer();
-	}
-
-	initPeer() {
 		navigator.mediaDevices.getUserMedia({
 			audio: true,
 			video: true
 		}).then((stream) => {
 			this.myVideo.srcObject = stream;
+			console.log(stream)
 			this.localStream = stream;
-			this.peer = new SimplePeer({
-				initiator: true,
-				trickle: false,
-				reconnectTimer: 60000,
-				stream: stream
-			});
-
-			this.peer.on('signal', (data) => {
-				this.myPeerId = JSON.stringify(data);
-				// this.peer.stream(data)
-			});
-
-			this.peer.on('stream', (stream) => {
-				this.otherVideo.src = window.URL.createObjectURL(stream);
-				// this.otherVideo.play();
-				console.log(stream)
-				// this.otherVideo.srcObject = stream;
-			});
-
-			this.peer.on('data', (data) => {
-				console.log(data)
-			})
 		}).catch(function (e) {
 			alert('getUserMedia() error: ' + e.name);
 		});
+	}
+	// init offer peer when confirm
+	initOfferPeer(message: any) {
+		this.peer = new SimplePeer({
+			initiator: true,
+			stream: this.localStream
+		});
+
+		this.peer.on('signal', (data) => {
+			if (!this.myPeerId) {
+				this.myPeerId = JSON.stringify(data);
+				message.target["peerId"] = JSON.stringify(data);
+				// ATTENTION !!!
+				// BLACK MAGIC : IF DELETE THIS TIMEOUT , P2P CONNECTION WILL NOT BE CONSTRUCT SUCCESSFUL
+				setTimeout(() => {
+					this.socketService.send(SocketMessageType.CONFIRM, message);
+				}, 500);
+				// MUST NOT DELETE !!!
+			}
+		});
+
+		this.peer.on('connect', () => {
+			console.log("source signal connected")
+			this.peer.send("hi")
+		})
+
+		this.peer.on('stream', (stream) => {
+			this.otherVideo.src = window.URL.createObjectURL(stream)
+			this.otherVideo.play()
+			console.log("source stream connected")
+		})
+
+		this.peer.on('data', (data) => {
+			console.log("data")
+		});
+
+		this.peer.on('error', (err) => {
+			console.log(err)
+			this.hangup();
+		});
+
+		this.peer.on('close', () => {
+			this.hangup();
+		});
+	}
+
+	// init receive peer when calling
+	initReceivePeer(message: any) {
+		this.peer = new SimplePeer({
+			initiator: false,
+			stream: this.localStream
+		});
+
+		this.peer.on('signal', (data) => {
+			if (!this.myPeerId) {
+				this.myPeerId = JSON.stringify(data);
+				message.source["peerId"] = this.myPeerId;
+				this.socketService.send(SocketMessageType.CALLING, message);
+			}
+		});
+
+		this.peer.on('connect', () => {
+			console.log("target signal connected")
+			this.peer.send("hi")
+		})
+
+		this.peer.on('stream', (stream) => {
+			console.log(stream)
+			// this.otherVideo.srcObject = stream;
+
+			this.otherVideo.src = window.URL.createObjectURL(stream)
+			this.otherVideo.play()
+			console.log("target stream connected")
+		})
+
+		this.peer.on('data', (data) => {
+			console.log("data")
+		});
+
+		this.peer.on('error', (err) => {
+			console.log(err)
+			this.hangup();
+		});
+
+		this.peer.on('close', () => {
+			this.hangup();
+		});
+
+		this.peer.signal(message.target["peerId"]);
 	}
 
 	connect(name: string) {
@@ -123,9 +186,7 @@ export class AppComponent {
 	onOffering(message: any) {
 		var result = confirm(message.source.name + '正在呼叫');
 		if (result) {
-			// TODO confirm with a stream
-			message.target["stream"] = this.myPeerId;
-			this.socketService.send(SocketMessageType.CONFIRM, message);
+			this.initOfferPeer(message);
 		} else {
 			this.socketService.send(SocketMessageType.CANCEL, message);
 		}
@@ -134,27 +195,27 @@ export class AppComponent {
 
 	// call target with a stream
 	onConfirm(message: any) {
-		message.source["stream"] = this.myPeerId;
-		this.socketService.send(SocketMessageType.CALLING, message);
-		// TODO get target stream and play
-		this.peer.signal(message.target["stream"]);
+		this.initReceivePeer(message);
 		console.log("on confirm")
 	}
 
 
 	// get source stream
 	onConnecting(message: any) {
-		// TODO get source stream and play
-		this.peer.signal(message.source["stream"]);
+		this.peer.signal(message.source["peerId"]);
 		console.log("on connecting")
 	}
 
 	onCancel(message: any) {
 		alert("对方已挂断");
-		this.peer.destroy();
-		this.initPeer();
-		// this.socketService.send(SocketMessageType.cancel, message)
+		this.hangup();
+		this.socketService.send(SocketMessageType.CANCEL, message)
 		// TODO cancel connection
+	}
+
+	hangup() {
+		this.myPeerId = "";
+		this.peer.destroy();
 	}
 
 
