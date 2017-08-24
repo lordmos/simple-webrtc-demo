@@ -45,7 +45,7 @@
                                                                     |
     在onConfirm收到target peerId        <-                    发送反馈(CONFIRM)
                 |
-  将target peerId放入Source Peer中
+    将target peerId放入Source Peer中
                 |
     生成source peerId(answer peer)
                 |
