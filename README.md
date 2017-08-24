@@ -74,8 +74,9 @@
     npm i
     ionic serve
 
-**如果在局域网内多台设备之间进行调试，则可以将项目中socket.service.ts文件下http://localhost:3000替换成局域网内启动server设备的IP地址。**
-**如：webrtc-server在192.168.1.199设备上启动，则将webrtc-web和webrtc-app工程中socket.service.ts文件下http://localhost:3000代码改为http://192.168.1.199:3000。**
+**如果在局域网内多台设备之间进行调试，则可以将项目中`socket.service.ts`文件下`http://localhost:3000`替换成局域网内启动server设备的IP地址。**
+
+**如：webrtc-server在`192.168.1.199`设备上启动，则将webrtc-web和webrtc-app工程中`socket.service.ts`文件下`http://localhost:3000`代码改为`http://192.168.1.199:3000`。**
 
 ### 已知问题
 
