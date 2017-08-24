@@ -49,6 +49,27 @@
                   |
      生成source peerId(answer peer)
                   |
-      发送呼叫target请求(CALLING)            --->      在onConnecting中将source peerId放入Target Peer中
+      发送呼叫target请求(CALLING)           --->      在onConnecting中将source peerId放入Target Peer中
                   |                                                     |
             获取stream并播放                                        获取stream并播放
+
+### 如何使用
+
+**注意，请使用最新版本的Chrome**
+
+#### webrtc-server
+
+    npm i
+    node index.js
+
+#### webrtc-web
+
+    ## angular-cli require
+    npm i
+    ng serve
+
+### 已知问题
+
+1. 旧版Safari不兼容。
+2. Firefox存在Error: Ice connection failed. Exception。
+3. 部署需要使用Https。
