@@ -87,6 +87,7 @@ export class AppComponent {
 			if (!this.myPeerId) {
 				this.myPeerId = JSON.stringify(data);
 				message.target["peerId"] = JSON.stringify(data);
+				console.log(this.myPeerId)
 				// ATTENTION !!!
 				// BLACK MAGIC : IF DELETE THIS TIMEOUT , P2P CONNECTION WILL NOT BE CONSTRUCT SUCCESSFUL
 				setTimeout(() => {
@@ -131,6 +132,7 @@ export class AppComponent {
 		this.peer.on('signal', (data) => {
 			if (!this.myPeerId) {
 				this.myPeerId = JSON.stringify(data);
+				console.log(this.myPeerId)
 				message.source["peerId"] = this.myPeerId;
 				this.socketService.send(SocketMessageType.CALLING, message);
 			}

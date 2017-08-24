@@ -1,3 +1,19 @@
 page-home {
-
+    video#meVideo {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        left: 0;
+        background: black;
+    }
+    video#targetVideo {
+        position: absolute;
+        right: 16px;
+        bottom: 16px;
+        height: 150px;
+        width: 200px;
+        border: 2px solid white;
+        background: black;
+    }
 }

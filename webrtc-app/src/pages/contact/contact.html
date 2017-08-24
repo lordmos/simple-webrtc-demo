@@ -1,17 +1,26 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Contact
-    </ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>
+            Contact
+        </ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-left></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+    <ion-list>
+
+        <ion-item>
+            <ion-label>你叫什么？</ion-label>
+            <ion-input type="text" [(ngModel)]="name"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <button ion-button (click)="connect(name)">连接到服务器</button>
+        </ion-item>
+
+        <ion-list-header>连接后获取联系人</ion-list-header>
+        <ion-item *ngFor="let user of userList" (click)="call(user)">
+            {{user.name}}: {{user.status}}
+        </ion-item>
+    </ion-list>
 </ion-content>
