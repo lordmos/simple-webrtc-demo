@@ -37,18 +37,18 @@
 
 ### 呼叫请求流程
 
-             source                                               target
+                source                                                target
 
-        发起请求(OFFERING)               ->                  在onOffering接收请求
-                                                                    |
-                                                        生成target peerId(offering peer)
-                                                                    |
-    在onConfirm收到target peerId        <-                    发送反馈(CONFIRM)
-                |
+          发起请求(OFFERING)                --->                 在onOffering接收请求
+                                                                        |
+                                                          生成target peerId(offering peer)
+                                                                        |
+      在onConfirm收到target peerId         <---                   发送反馈(CONFIRM)
+                  |
     将target peerId放入Source Peer中
-                |
-    生成source peerId(answer peer)
-                |
-      发送呼叫target请求(CALLING)        ->        在onConnecting中将source peerId放入Target Peer中
-                |                                                   |
-         获取stream并播放                                       获取stream并播放
+                  |
+     生成source peerId(answer peer)
+                  |
+      发送呼叫target请求(CALLING)            --->      在onConnecting中将source peerId放入Target Peer中
+                  |                                                     |
+            获取stream并播放                                        获取stream并播放
