@@ -68,8 +68,19 @@
     npm i
     ng serve
 
+#### webrtc-app
+
+    ## ionic-cli require
+    npm i
+    ionic serve
+
+**如果在局域网内多台设备之间进行调试，则可以将项目中socket.service.ts文件下http://localhost:3000替换成局域网内启动server设备的IP地址。**
+**如：webrtc-server在192.168.1.199设备上启动，则将webrtc-web和webrtc-app工程中socket.service.ts文件下http://localhost:3000代码改为http://192.168.1.199:3000。**
+
 ### 已知问题
 
 1. 旧版Safari不兼容。
 2. Firefox存在Error: Ice connection failed. Exception。
 3. 部署需要使用Https。
+4. 存在ionic在Android手机上无法调起相机的Bug。
+5. iOS的兼容性未知。
